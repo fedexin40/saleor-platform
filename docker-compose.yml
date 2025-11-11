@@ -2,7 +2,7 @@ version: "3.4"
 
 services:
   api:
-    image: fedexin40/saleor:3.20.2_proyecto705
+    image: fedexin40/saleor:3.22.2
     ports:
       - 8000:8000
     restart: unless-stopped
@@ -22,16 +22,16 @@ services:
     environment:
       - JAEGER_AGENT_HOST=jaeger
       - DASHBOARD_URL=http://localhost:9000/
-      - ALLOWED_HOSTS=localhost,api,api.proyecto705.com,admin.proyecto705.com,email.proyecto705.com,proyecto705.com,*.proyecto705.com
+      - ALLOWED_HOSTS=localhost,api,api.proyecto705.com.mx,admin.proyecto705.com.mx,email.proyecto705.com.mx,proyecto705.com,*.proyecto705.com.mx
 
   dashboard:
-    image: fedexin40/saleor-dashboard
+    image: fedexin40/saleor-dashboard:3.22.4
     ports:
       - 9000:80
     restart: unless-stopped
 
   db:
-    image: library/postgres:13-alpine
+    image: library/postgres:15-alpine
     ports:
       - 5432:5432
     restart: unless-stopped
@@ -39,7 +39,7 @@ services:
       - saleor-backend-tier
     volumes:
       - saleor-db:/var/lib/postgresql/data
-      - ./replica_user.sql:/docker-entrypoint-initdb.d/replica_user.sql
+      - ./replica_user.sql:/docker-entrypoint-initdb.d/replica_user.sql:ro,z
     environment:
       - POSTGRES_USER=saleor
       - POSTGRES_PASSWORD=saleor
@@ -55,7 +55,7 @@ services:
       - saleor-redis:/data
 
   worker:
-    image: fedexin40/saleor:3.20.2_proyecto705
+    image: fedexin40/saleor:3.22.2
     command: celery -A saleor --app=saleor.celeryconf:app worker --loglevel=info -B
     restart: unless-stopped
     networks:
