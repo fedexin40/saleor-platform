@@ -22,7 +22,7 @@ services:
     environment:
       - JAEGER_AGENT_HOST=jaeger
       - DASHBOARD_URL=http://localhost:9000/
-      - ALLOWED_HOSTS=localhost,api,api.proyecto705.com.mx,admin.proyecto705.com.mx,email.proyecto705.com.mx,proyecto705.com,*.proyecto705.com.mx
+      - ALLOWED_HOSTS=127.0.0.1,localhost,api.proyecto705.com.mx,admin.proyecto705.com.mx,smtp.proyecto705.com.mx,proyecto705.com.mx,shipping.proyecto705.com.mx,checkout.proyecto705.com.mx,*.proyecto705.com.mx
 
   dashboard:
     image: fedexin40/saleor-dashboard:3.22.4
