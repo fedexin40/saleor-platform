@@ -30,6 +30,18 @@ services:
       - 9000:80
     restart: unless-stopped
 
+  saleor-mcp:
+    build:
+      context: ../saleor-mcp  # Path to the cloned saleor-mcp directory
+      dockerfile: Dockerfile
+    ports:
+      - "8008:8000" # Expose the default MCP port
+    environment:
+      # Use your Saleor API service name and port within the Docker network
+      X-Saleor-API-URL: "https://api:proyecto705.com.mx/graphql/"
+      # IMPORTANT: Replace with a valid auth token generated in your Saleor dashboard
+      X-Saleor-Auth-Token: "YOUR_SALEOR_AUTH_TOKEN"
+
   db:
     image: library/postgres:15-alpine
     ports:
