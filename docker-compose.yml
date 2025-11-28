@@ -36,11 +36,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8008:8000" # Expose the default MCP port
-    environment:
-      # Use your Saleor API service name and port within the Docker network
-      X-Saleor-API-URL: "https://api:proyecto705.com.mx/graphql/"
-      # IMPORTANT: Replace with a valid auth token generated in your Saleor dashboard
-      X-Saleor-Auth-Token: "YOUR_SALEOR_AUTH_TOKEN"
 
   db:
     image: library/postgres:15-alpine
@@ -52,9 +47,16 @@ services:
     volumes:
       - saleor-db:/var/lib/postgresql/data
       - ./replica_user.sql:/docker-entrypoint-initdb.d/replica_user.sql:ro,z
+      - ./postgres/server.crt:/var/lib/postgresql/server.crt:ro
+      - ./postgres/server.key:/var/lib/postgresql/server.key:ro
     environment:
       - POSTGRES_USER=saleor
       - POSTGRES_PASSWORD=saleor
+    command: >
+      postgres
+      -c ssl=on
+      -c ssl_cert_file=/var/lib/postgresql/server.crt
+      -c ssl_key_file=/var/lib/postgresql/server.key
 
   redis:
     image: library/redis:7.0-alpine
